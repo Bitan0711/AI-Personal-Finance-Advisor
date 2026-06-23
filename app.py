@@ -19,16 +19,21 @@ except ImportError:
 # 1. PAGE CONFIGURATION & THEME STYLING
 # ==========================================
 st.set_page_config(
-    page_title="AI Personal Finance Advisor",
-    page_icon="💰",
+    page_title="SmartWealth AI - Personal Finance Advisor",
+    page_icon="🪙",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for fintech dark/light balanced theme
+# Custom CSS to hide default Streamlit developer menus & optimize layout with premium dark styling
 custom_css = """
 <style>
-/* Font and general styles */
+/* Hiding Streamlit developer branding elements */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+/* Custom typography & layout */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 html, body, [data-testid="stSidebar"] {
@@ -40,31 +45,32 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
-/* Custom dashboard cards */
+/* Glassmorphism Fintech Cards */
 .metric-card {
-    background-color: #1e293b;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     padding: 24px;
     border-radius: 16px;
     border: 1px solid #334155;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
     margin-bottom: 15px;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .metric-card:hover {
-    transform: translateY(-2px);
-    border-color: #4f46e5;
+    transform: translateY(-4px);
+    border-color: #6366f1;
+    box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.2);
 }
 .metric-title {
     color: #94a3b8;
     font-size: 14px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     margin-bottom: 8px;
 }
 .metric-value {
-    color: #f8fafc;
-    font-size: 32px;
+    color: #ffffff;
+    font-size: 30px;
     font-weight: 700;
     margin: 0;
 }
@@ -75,26 +81,26 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0;
 }
 
-/* Alert styles */
+/* Styled user alerts */
 .warning-box {
-    background-color: rgba(239, 68, 68, 0.1);
-    border: 1px solid #ef4444;
+    background-color: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.3);
     color: #fca5a5;
     padding: 16px;
     border-radius: 12px;
     margin-bottom: 15px;
 }
 .success-box {
-    background-color: rgba(34, 197, 94, 0.1);
-    border: 1px solid #22c55e;
+    background-color: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.3);
     color: #86efac;
     padding: 16px;
     border-radius: 12px;
     margin-bottom: 15px;
 }
 .info-box {
-    background-color: rgba(99, 102, 241, 0.1);
-    border: 1px solid #6366f1;
+    background-color: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.3);
     color: #c7d2fe;
     padding: 16px;
     border-radius: 12px;
@@ -121,42 +127,42 @@ def render_kpi_card(title, value, subtitle, border_color="#334155"):
 # ==========================================
 def get_initial_dummy_data():
     today = date.today()
-    # Create spanning data for last 3 months
+    # Create mock transaction logs spanning 3 months back in INR scale
     d1 = today - timedelta(days=75)
     d2 = today - timedelta(days=45)
     d3 = today - timedelta(days=15)
     
     data = [
         # April (2 months ago)
-        {"Date": d1.replace(day=1), "Amount": 5500.0, "Type": "Income", "Category": "Salary", "Description": "Monthly Corporate Salary"},
-        {"Date": d1.replace(day=12), "Amount": 750.0, "Type": "Income", "Category": "Freelance/Side Hustle", "Description": "Web Consulting Project"},
-        {"Date": d1.replace(day=2), "Amount": 1250.0, "Type": "Expense", "Category": "Housing", "Description": "Rent Payment"},
-        {"Date": d1.replace(day=5), "Amount": 180.0, "Type": "Expense", "Category": "Food & Dining", "Description": "Weekly Groceries"},
-        {"Date": d1.replace(day=8), "Amount": 120.0, "Type": "Expense", "Category": "Utilities", "Description": "Power & Water"},
-        {"Date": d1.replace(day=15), "Amount": 200.0, "Type": "Expense", "Category": "Transportation", "Description": "Monthly Transit Pass"},
-        {"Date": d1.replace(day=20), "Amount": 85.0, "Type": "Expense", "Category": "Entertainment", "Description": "Cinema & Dining"},
-        {"Date": d1.replace(day=25), "Amount": 150.0, "Type": "Expense", "Category": "Shopping", "Description": "Winter Apparel"},
+        {"Date": d1.replace(day=1), "Amount": 95000.0, "Type": "Income", "Category": "Salary", "Description": "Monthly Corporate Salary"},
+        {"Date": d1.replace(day=12), "Amount": 15000.0, "Type": "Income", "Category": "Freelance/Side Hustle", "Description": "Freelance Dev Consulting"},
+        {"Date": d1.replace(day=2), "Amount": 22000.0, "Type": "Expense", "Category": "Housing", "Description": "Apartment Rent"},
+        {"Date": d1.replace(day=5), "Amount": 6500.0, "Type": "Expense", "Category": "Food & Dining", "Description": "Weekly Groceries"},
+        {"Date": d1.replace(day=8), "Amount": 3500.0, "Type": "Expense", "Category": "Utilities", "Description": "Electricity & Gas"},
+        {"Date": d1.replace(day=15), "Amount": 4000.0, "Type": "Expense", "Category": "Transportation", "Description": "Fuel & Car Maintenance"},
+        {"Date": d1.replace(day=20), "Amount": 2800.0, "Type": "Expense", "Category": "Entertainment", "Description": "Weekend Outing & Dining"},
+        {"Date": d1.replace(day=25), "Amount": 5500.0, "Type": "Expense", "Category": "Shopping", "Description": "New Footwear & Clothing"},
 
         # May (1 month ago)
-        {"Date": d2.replace(day=1), "Amount": 5500.0, "Type": "Income", "Category": "Salary", "Description": "Monthly Corporate Salary"},
-        {"Date": d2.replace(day=15), "Amount": 920.0, "Type": "Income", "Category": "Freelance/Side Hustle", "Description": "App UX Design Contract"},
-        {"Date": d2.replace(day=20), "Amount": 100.0, "Type": "Income", "Category": "Investments", "Description": "Quarterly Dividends"},
-        {"Date": d2.replace(day=2), "Amount": 1250.0, "Type": "Expense", "Category": "Housing", "Description": "Rent Payment"},
-        {"Date": d2.replace(day=6), "Amount": 210.0, "Type": "Expense", "Category": "Food & Dining", "Description": "Supermarket Purchase"},
-        {"Date": d2.replace(day=9), "Amount": 135.0, "Type": "Expense", "Category": "Utilities", "Description": "Gas & Internet Bill"},
-        {"Date": d2.replace(day=14), "Amount": 75.0, "Type": "Expense", "Category": "Health & Fitness", "Description": "Gym Membership"},
-        {"Date": d2.replace(day=22), "Amount": 190.0, "Type": "Expense", "Category": "Entertainment", "Description": "Live Concert Tickets"},
-        {"Date": d2.replace(day=26), "Amount": 300.0, "Type": "Expense", "Category": "Education", "Description": "Fintech Certification Course"},
+        {"Date": d2.replace(day=1), "Amount": 95000.0, "Type": "Income", "Category": "Salary", "Description": "Monthly Corporate Salary"},
+        {"Date": d2.replace(day=15), "Amount": 18000.0, "Type": "Income", "Category": "Freelance/Side Hustle", "Description": "UI/UX Contract Work"},
+        {"Date": d2.replace(day=20), "Amount": 2500.0, "Type": "Income", "Category": "Investments", "Description": "Mutual Fund Dividends"},
+        {"Date": d2.replace(day=2), "Amount": 22000.0, "Type": "Expense", "Category": "Housing", "Description": "Apartment Rent"},
+        {"Date": d2.replace(day=6), "Amount": 7200.0, "Type": "Expense", "Category": "Food & Dining", "Description": "Supermarket Groceries"},
+        {"Date": d2.replace(day=9), "Amount": 3800.0, "Type": "Expense", "Category": "Utilities", "Description": "Broadband & Power Bill"},
+        {"Date": d2.replace(day=14), "Amount": 1500.0, "Type": "Expense", "Category": "Health & Fitness", "Description": "Gym Membership"},
+        {"Date": d2.replace(day=22), "Amount": 4500.0, "Type": "Expense", "Category": "Entertainment", "Description": "Movie & Dining Out"},
+        {"Date": d2.replace(day=26), "Amount": 8000.0, "Type": "Expense", "Category": "Education", "Description": "Online Course Certificate"},
 
         # June (Current Month)
-        {"Date": d3.replace(day=1), "Amount": 5500.0, "Type": "Income", "Category": "Salary", "Description": "Monthly Corporate Salary"},
-        {"Date": d3.replace(day=15), "Amount": 500.0, "Type": "Income", "Category": "Freelance/Side Hustle", "Description": "Consulting Advisory"},
-        {"Date": d3.replace(day=2), "Amount": 1250.0, "Type": "Expense", "Category": "Housing", "Description": "Rent Payment"},
-        {"Date": d3.replace(day=4), "Amount": 195.0, "Type": "Expense", "Category": "Food & Dining", "Description": "Supermarket Supplies"},
-        {"Date": d3.replace(day=9), "Amount": 130.0, "Type": "Expense", "Category": "Utilities", "Description": "Electricity & Gas"},
-        {"Date": d3.replace(day=14), "Amount": 240.0, "Type": "Expense", "Category": "Food & Dining", "Description": "Anniversary Dinner"},
-        {"Date": d3.replace(day=18), "Amount": 80.0, "Type": "Expense", "Category": "Transportation", "Description": "Uber & Cab rides"},
-        {"Date": d3.replace(day=21), "Amount": 30.0, "Type": "Expense", "Category": "Entertainment", "Description": "Streaming Subscriptions"}
+        {"Date": d3.replace(day=1), "Amount": 95000.0, "Type": "Income", "Category": "Salary", "Description": "Monthly Corporate Salary"},
+        {"Date": d3.replace(day=15), "Amount": 12000.0, "Type": "Income", "Category": "Freelance/Side Hustle", "Description": "Graphic Design Gig"},
+        {"Date": d3.replace(day=2), "Amount": 22000.0, "Type": "Expense", "Category": "Housing", "Description": "Apartment Rent"},
+        {"Date": d3.replace(day=4), "Amount": 6800.0, "Type": "Expense", "Category": "Food & Dining", "Description": "Weekly Groceries"},
+        {"Date": d3.replace(day=9), "Amount": 3600.0, "Type": "Expense", "Category": "Utilities", "Description": "Power & Broadband Bill"},
+        {"Date": d3.replace(day=14), "Amount": 5200.0, "Type": "Expense", "Category": "Food & Dining", "Description": "Restaurant Outing"},
+        {"Date": d3.replace(day=18), "Amount": 3200.0, "Type": "Expense", "Category": "Transportation", "Description": "Cab Fare & Auto rides"},
+        {"Date": d3.replace(day=21), "Amount": 699.0, "Type": "Expense", "Category": "Entertainment", "Description": "OTT Subscriptions"}
     ]
     return pd.DataFrame(data)
 
@@ -165,22 +171,22 @@ if "transactions" not in st.session_state:
     st.session_state.transactions = get_initial_dummy_data()
 
 if "monthly_budget" not in st.session_state:
-    st.session_state.monthly_budget = 3000.0
+    st.session_state.monthly_budget = 45000.0
 
 if "goal_name" not in st.session_state:
-    st.session_state.goal_name = "Emergency Fund Reserve"
+    st.session_state.goal_name = "Emergency Buffer Fund"
 
 if "goal_amount" not in st.session_state:
-    st.session_state.goal_amount = 15000.0
+    st.session_state.goal_amount = 500000.0
 
 if "goal_contrib" not in st.session_state:
-    st.session_state.goal_contrib = 600.0
+    st.session_state.goal_contrib = 15000.0
 
 if "goal_return" not in st.session_state:
-    st.session_state.goal_return = 6.5
+    st.session_state.goal_return = 9.0
 
 if "goal_start" not in st.session_state:
-    st.session_state.goal_start = 2000.0
+    st.session_state.goal_start = 50000.0
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
@@ -236,20 +242,17 @@ def calculate_financial_health_score(df):
 
 # Investment Allocation Model
 def get_investment_recommendation(age, risk_tolerance, income):
-    # Base equity allocation determined using the standard industry "110 - age" rule
     base_equity = max(10, min(95, 110 - age))
     
-    # Modify base allocation based on risk profile
     if risk_tolerance == "Conservative":
         equity_ratio = max(10, base_equity - 25)
     elif risk_tolerance == "Moderate":
         equity_ratio = base_equity
-    else:  # Aggressive
+    else: # Aggressive
         equity_ratio = min(95, base_equity + 15)
         
     debt_ratio = 100 - equity_ratio
     
-    # Proportional assets inside Equity and Fixed Income classes
     if risk_tolerance == "Conservative":
         fd_pct = round(debt_ratio * 0.7)
         mf_pct = round(debt_ratio * 0.3)
@@ -262,14 +265,13 @@ def get_investment_recommendation(age, risk_tolerance, income):
         idx_pct = round(equity_ratio * 0.4)
         etf_pct = round(equity_ratio * 0.4)
         stock_pct = round(equity_ratio * 0.2)
-    else:  # Aggressive
+    else: # Aggressive
         fd_pct = round(debt_ratio * 0.3)
         mf_pct = round(debt_ratio * 0.7)
         idx_pct = round(equity_ratio * 0.3)
         etf_pct = round(equity_ratio * 0.4)
         stock_pct = round(equity_ratio * 0.3)
         
-    # Realign summation matching exactly 100%
     allocations = {
         "Fixed Deposit": max(0, fd_pct),
         "Mutual Funds": max(0, mf_pct),
@@ -283,23 +285,22 @@ def get_investment_recommendation(age, risk_tolerance, income):
         diff = 100 - alloc_sum
         allocations["Index Funds"] += diff
 
-    # Industry benchmark historical annualized returns:
-    # FD: 6%, MF: 9%, Index Funds: 11%, ETFs: 11.5%, Stocks: 14%
+    # Benchmark returns:
+    # FD: 6.5% (India bank rate), Mutual Funds: 10%, Index Funds: 12%, ETFs: 12.5%, Stocks: 15%
     weighted_return = (
-        allocations["Fixed Deposit"] * 0.06 +
-        allocations["Mutual Funds"] * 0.09 +
-        allocations["Index Funds"] * 0.11 +
-        allocations["ETFs"] * 0.115 +
-        allocations["Stocks"] * 0.14
+        allocations["Fixed Deposit"] * 0.065 +
+        allocations["Mutual Funds"] * 0.10 +
+        allocations["Index Funds"] * 0.12 +
+        allocations["ETFs"] * 0.125 +
+        allocations["Stocks"] * 0.15
     )
     
-    # Explanatory description
     if risk_tolerance == "Conservative":
-        desc = "Preservation-focused: Tailored to steady income generation and minimizing drawdowns."
+        desc = "Capital Preservation: Prioritizing capital safety and inflation hedging via Fixed Income."
     elif risk_tolerance == "Moderate":
-        desc = "Balanced-focused: Capital growth aligned with overall broad market performance."
+        desc = "Balanced Growth: Leveraging growth from indices while hedging volatility with debt."
     else:
-        desc = "Growth-focused: Designed for maximized long-term compounding with high risk tolerance."
+        desc = "Aggressive Compounding: High equity weight aiming for wealth creation over long horizons."
         
     return allocations, weighted_return, desc
 
@@ -323,8 +324,6 @@ def calculate_savings_timeline(goal_amount, monthly_contrib, expected_return_ann
         months = np.log(val_num / val_den) / np.log(1 + r)
         
     months = int(np.ceil(months))
-    
-    # Cap projections to 240 months (20 years) to avoid performance issues
     projected_months = min(months + 12, 240)
     
     projection = []
@@ -338,23 +337,77 @@ def calculate_savings_timeline(goal_amount, monthly_contrib, expected_return_ann
             
     return months, projection
 
+# Indian Income Tax Calculator Slabs
+def calculate_indian_tax(gross_income, other_income=0.0):
+    # Deduct Standard Deduction under New Tax Regime
+    std_deduction = 75000.0
+    taxable_income = max(0.0, gross_income + other_income - std_deduction)
+    
+    # Slab rates for New Tax Regime (FY 2024-25 / FY 2025-26)
+    slabs = [
+        (300000, 0.0),
+        (700000, 0.05),
+        (1000000, 0.10),
+        (1200000, 0.15),
+        (1500000, 0.20),
+        (float('inf'), 0.30)
+    ]
+    
+    tax = 0.0
+    prev_limit = 0
+    slab_details = []
+    
+    remaining = taxable_income
+    for limit, rate in slabs:
+        slab_width = limit - prev_limit
+        if remaining > slab_width:
+            slab_tax = slab_width * rate
+            tax += slab_tax
+            remaining -= slab_width
+            slab_details.append(f"₹{prev_limit+1:,} to ₹{limit:,} ({rate*100:.0f}%): ₹{slab_tax:,.2f}")
+            prev_limit = limit
+        else:
+            slab_tax = remaining * rate
+            tax += slab_tax
+            slab_details.append(f"₹{prev_limit+1:,} to ₹{int(prev_limit+remaining):,} ({rate*100:.0f}%): ₹{slab_tax:,.2f}")
+            break
+            
+    # Section 87A Rebate: Under New Regime, if taxable income <= ₹7,00,000, tax is rebated to Nil
+    rebate = 0.0
+    if taxable_income <= 700000.0:
+        rebate = tax
+        tax = 0.0
+        
+    cess = tax * 0.04
+    total_tax = tax + cess
+    
+    return taxable_income, std_deduction, tax, rebate, cess, total_tax, slab_details
+
 
 # ==========================================
 # 4. SIDEBAR INPUTS & NAVIGATION CONTROL
 # ==========================================
-st.sidebar.markdown("<h2 style='text-align: center; color: #6366f1;'>💰 SmartWealth AI</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<h2 style='text-align: center; color: #6366f1;'>🪙 SmartWealth AI</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<p style='text-align: center; color: #94a3b8; font-size: 13px;'>AI-Driven Financial Advisor (INR Re-localized)</p>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
 # Navigation selectbox
 menu = st.sidebar.radio(
     "Navigation View",
-    ["Dashboard & Analytics", "Transactions Management", "Budget & Savings Goals", "Investment Recommendations", "AI Advisory Panel"]
+    [
+        "Dashboard & Analytics", 
+        "Transactions Management", 
+        "Budget & Savings Goals", 
+        "Investment Recommendations", 
+        "Indian Income Tax Calculator",
+        "AI Advisory Panel"
+    ]
 )
 
 st.sidebar.markdown("### Profile Parameters")
 user_age = st.sidebar.number_input("User Age", min_value=18, max_value=100, value=30, step=1)
 user_risk = st.sidebar.selectbox("Risk Profile Type", ["Conservative", "Moderate", "Aggressive"], index=1)
-user_income = st.sidebar.number_input("Monthly Net Income ($)", min_value=0.0, value=6000.0, step=500.0)
+user_income = st.sidebar.number_input("Monthly Net Income (₹)", min_value=0.0, value=115000.0, step=5000.0)
 
 st.sidebar.markdown("### Advisor Connectivity")
 gemini_api_key = st.sidebar.text_input("Gemini API Key (Optional)", type="password", help="Input your Google Gemini API Key for customized GenAI consultations.")
@@ -371,7 +424,6 @@ if gemini_api_key:
 # ==========================================
 df_tx = st.session_state.transactions
 
-# Ensure type conversions
 if not df_tx.empty:
     df_tx["Date"] = pd.to_datetime(df_tx["Date"])
     df_tx["Amount"] = df_tx["Amount"].astype(float)
@@ -395,7 +447,7 @@ current_month_exp_sum = curr_month_tx["Amount"].sum() if not curr_month_tx.empty
 
 
 # ==========================================
-# TAB VIEW 1: DASHBOARD & ANALYTICS
+# VIEW 1: DASHBOARD & ANALYTICS
 # ==========================================
 if menu == "Dashboard & Analytics":
     st.markdown("<h1>📊 Financial Dashboard</h1>", unsafe_allow_html=True)
@@ -407,21 +459,21 @@ if menu == "Dashboard & Analytics":
     with col1:
         render_kpi_card(
             "Total Income",
-            f"${tot_inc:,.2f}",
+            f"₹{tot_inc:,.2f}",
             "Cumulative inflows",
             "#22c55e" # Green
         )
     with col2:
         render_kpi_card(
             "Total Expenses",
-            f"${tot_exp:,.2f}",
+            f"₹{tot_exp:,.2f}",
             "Cumulative outflows",
             "#ef4444" # Red
         )
     with col3:
         render_kpi_card(
             "Net Savings",
-            f"${tot_sav:,.2f}",
+            f"₹{tot_sav:,.2f}",
             "Total accumulated capital",
             "#06b6d4" # Teal
         )
@@ -447,7 +499,6 @@ if menu == "Dashboard & Analytics":
     
     with col_left:
         st.markdown("### Financial Health Index Gauge")
-        # Gauge chart using Plotly graph objects
         fig_gauge = go.Figure(go.Indicator(
             mode="gauge+number",
             value=h_score,
@@ -474,7 +525,7 @@ if menu == "Dashboard & Analytics":
         )
         st.plotly_chart(fig_gauge, use_container_width=True)
         
-        # Display short descriptive rating box
+        # Display rating box
         if h_score < 40:
             st.markdown(
                 "<div class='warning-box'><strong>Rating: Poor Health Score</strong><br>"
@@ -492,7 +543,7 @@ if menu == "Dashboard & Analytics":
         else:
             st.markdown(
                 "<div class='success-box'><strong>Rating: Excellent Health Score</strong><br>"
-                "Fantastic! You have a high savings rate, an solid emergency cushion, and well-managed outflows. "
+                "Fantastic! You have a high savings rate, a solid emergency cushion, and well-managed outflows. "
                 "You are ready to optimize your investments.</div>",
                 unsafe_allow_html=True
             )
@@ -542,13 +593,13 @@ if menu == "Dashboard & Analytics":
         fig_trend.add_trace(go.Bar(
             x=trend_pivot["Month-Year"], 
             y=trend_pivot["Income"], 
-            name="Income", 
+            name="Income (₹)", 
             marker_color="#22c55e"
         ))
         fig_trend.add_trace(go.Bar(
             x=trend_pivot["Month-Year"], 
             y=trend_pivot["Expense"], 
-            name="Expense", 
+            name="Expense (₹)", 
             marker_color="#ef4444"
         ))
         
@@ -568,7 +619,7 @@ if menu == "Dashboard & Analytics":
 
 
 # ==========================================
-# TAB VIEW 2: TRANSACTIONS MANAGEMENT
+# VIEW 2: TRANSACTIONS MANAGEMENT
 # ==========================================
 elif menu == "Transactions Management":
     st.markdown("<h1>✍️ Transaction Ledger</h1>", unsafe_allow_html=True)
@@ -588,8 +639,8 @@ elif menu == "Transactions Management":
             else:
                 tx_category = st.selectbox("Category", ["Housing", "Food & Dining", "Utilities", "Transportation", "Entertainment", "Health & Fitness", "Education", "Shopping", "Other Expense"])
                 
-            tx_amount = st.number_input("Amount ($)", min_value=0.01, step=10.0, format="%.2f")
-            tx_desc = st.text_input("Description", placeholder="E.g. Walmart, Client design work")
+            tx_amount = st.number_input("Amount (₹)", min_value=1.00, step=100.0, format="%.2f")
+            tx_desc = st.text_input("Description", placeholder="E.g. Groceries, Client design work")
             
             submitted = st.form_submit_button("Record Transaction")
             
@@ -613,7 +664,7 @@ elif menu == "Transactions Management":
             tx_to_delete = st.selectbox(
                 "Select Transaction to Delete",
                 options=df_tx.index,
-                format_func=lambda idx: f"[{df_tx.loc[idx, 'Date'].strftime('%Y-%m-%d')}] {df_tx.loc[idx, 'Type']} | {df_tx.loc[idx, 'Category']} | ${df_tx.loc[idx, 'Amount']:.2f} | {df_tx.loc[idx, 'Description']}"
+                format_func=lambda idx: f"[{df_tx.loc[idx, 'Date'].strftime('%Y-%m-%d')}] {df_tx.loc[idx, 'Type']} | {df_tx.loc[idx, 'Category']} | ₹{df_tx.loc[idx, 'Amount']:.2f} | {df_tx.loc[idx, 'Description']}"
             )
             if st.button("Delete Selected Transaction", type="secondary"):
                 st.session_state.transactions = df_tx.drop(tx_to_delete).reset_index(drop=True)
@@ -636,7 +687,7 @@ elif menu == "Transactions Management":
                 view_df,
                 use_container_width=True,
                 column_config={
-                    "Amount": st.column_config.NumberColumn(format="$%.2f")
+                    "Amount": st.column_config.NumberColumn(format="₹%.2f")
                 }
             )
             
@@ -655,7 +706,7 @@ elif menu == "Transactions Management":
 
 
 # ==========================================
-# TAB VIEW 3: BUDGET & SAVINGS GOALS
+# VIEW 3: BUDGET & SAVINGS GOALS
 # ==========================================
 elif menu == "Budget & Savings Goals":
     st.markdown("<h1>🎯 Budgets & Goal Planners</h1>", unsafe_allow_html=True)
@@ -665,11 +716,11 @@ elif menu == "Budget & Savings Goals":
     
     with col_bud:
         st.markdown("### Monthly Spending Budget")
-        monthly_budget = st.number_input("Monthly Budget Cap ($)", min_value=1.0, value=st.session_state.monthly_budget, step=100.0)
+        monthly_budget = st.number_input("Monthly Budget Cap (₹)", min_value=1.0, value=st.session_state.monthly_budget, step=1000.0)
         st.session_state.monthly_budget = monthly_budget
         
-        st.write(f"This Month's Spending Goal Cap: **${monthly_budget:,.2f}**")
-        st.write(f"Actual Outflows Recorded (June): **${current_month_exp_sum:,.2f}**")
+        st.write(f"This Month's Spending Goal Cap: **₹{monthly_budget:,.2f}**")
+        st.write(f"Actual Outflows Recorded (Current Month): **₹{current_month_exp_sum:,.2f}**")
         
         # Budget utilization calculation
         utilization_rate = (current_month_exp_sum / monthly_budget * 100) if monthly_budget > 0 else 0.0
@@ -694,7 +745,7 @@ elif menu == "Budget & Savings Goals":
         if utilization_rate > 100:
             st.markdown(
                 f"<div class='warning-box'>🚨 **Over Budget warning!** You have exceeded your designated limit by "
-                f"**${(current_month_exp_sum - monthly_budget):,.2f}**. Consider delaying non-essential purchases.</div>", 
+                f"**₹{(current_month_exp_sum - monthly_budget):,.2f}**. Consider delaying non-essential outflows.</div>", 
                 unsafe_allow_html=True
             )
         elif utilization_rate > 80:
@@ -716,13 +767,13 @@ elif menu == "Budget & Savings Goals":
         
         col_g1, col_g2 = st.columns(2)
         with col_g1:
-            goal_amount = st.number_input("Target Goal Amount ($)", min_value=1.0, value=st.session_state.goal_amount, step=500.0)
+            goal_amount = st.number_input("Target Goal Amount (₹)", min_value=1.0, value=st.session_state.goal_amount, step=10000.0)
             st.session_state.goal_amount = goal_amount
-            starting_bal = st.number_input("Starting Capital Balance ($)", min_value=0.0, value=st.session_state.goal_start, step=250.0)
+            starting_bal = st.number_input("Starting Capital Balance (₹)", min_value=0.0, value=st.session_state.goal_start, step=5000.0)
             st.session_state.goal_start = starting_bal
             
         with col_g2:
-            monthly_contrib = st.number_input("Monthly Contribution ($)", min_value=1.0, value=st.session_state.goal_contrib, step=50.0)
+            monthly_contrib = st.number_input("Monthly Contribution (₹)", min_value=1.0, value=st.session_state.goal_contrib, step=1000.0)
             st.session_state.goal_contrib = monthly_contrib
             expected_return = st.number_input("Expected Annual Return (%)", min_value=0.0, max_value=40.0, value=st.session_state.goal_return, step=0.5)
             st.session_state.goal_return = expected_return
@@ -756,7 +807,7 @@ elif menu == "Budget & Savings Goals":
             df_proj, 
             x="Month", 
             y="Balance", 
-            labels={"Month": "Months Elapsed", "Balance": "Portfolio Value ($)"}
+            labels={"Month": "Months Elapsed", "Balance": "Portfolio Value (₹)"}
         )
         
         # Add target line
@@ -776,7 +827,7 @@ elif menu == "Budget & Savings Goals":
 
 
 # ==========================================
-# TAB VIEW 4: INVESTMENT RECOMMENDATIONS
+# VIEW 4: INVESTMENT RECOMMENDATIONS
 # ==========================================
 elif menu == "Investment Recommendations":
     st.markdown("<h1>📈 Asset Allocation Model</h1>", unsafe_allow_html=True)
@@ -831,7 +882,54 @@ elif menu == "Investment Recommendations":
 
 
 # ==========================================
-# TAB VIEW 5: AI ADVISORY PANEL & REPORT
+# VIEW 5: INDIAN INCOME TAX CALCULATOR
+# ==========================================
+elif menu == "Indian Income Tax Calculator":
+    st.markdown("<h1>📑 Indian Income Tax Calculator</h1>", unsafe_allow_html=True)
+    st.write("Calculate tax liability estimation under the **New Tax Regime (FY 2024-25 / FY 2025-26)**.")
+    
+    col_t1, col_t2 = st.columns([1, 1])
+    
+    with col_t1:
+        st.markdown("### Income Parameters")
+        gross_salary = st.number_input("Annual Gross Salary (₹)", min_value=0.0, value=user_income * 12.0, step=50000.0)
+        other_taxable_income = st.number_input("Other Income / Business Income (₹)", min_value=0.0, value=0.0, step=10000.0)
+        
+        # Run calculations
+        taxable_inc, std_ded, base_tax, rebate_87a, cess_tax, total_tax_due, slab_breakdown = calculate_indian_tax(gross_salary, other_taxable_income)
+        
+        # Display deductions details
+        st.markdown("---")
+        st.markdown("### Calculations Overview")
+        st.write(f"Gross Annual Income: **₹{gross_salary + other_taxable_income:,.2f}**")
+        st.write(f"(-) Standard Deduction: **₹{std_ded:,.2f}**")
+        st.write(f"Taxable Income: **₹{taxable_inc:,.2f}**")
+        
+        if rebate_87a > 0:
+            st.markdown(f"<div style='color: #86efac;'>✨ **Rebate Applicable (Sec 87A):** Taxable income is ≤ ₹7,00,000, making tax liability Nil (Rebate of ₹{rebate_87a:,.2f} applied).</div>", unsafe_allow_html=True)
+            
+    with col_t2:
+        st.markdown("### Tax Summary Output")
+        
+        render_kpi_card(
+            "Estimated Net Tax Liability",
+            f"₹{total_tax_due:,.2f}",
+            "Includes 4% Health & Education Cess",
+            "#ef4444" if total_tax_due > 0.0 else "#22c55e"
+        )
+        
+        # Breakdown details
+        st.write(f"Basic Slab Tax: **₹{base_tax:,.2f}**")
+        st.write(f"Health & Education Cess (4%): **₹{cess_tax:,.2f}**")
+        st.write(f"Total Rebate applied: **₹{rebate_87a:,.2f}**")
+        
+        st.markdown("### Slab Breakdown Details")
+        for detail in slab_breakdown:
+            st.write(f"• {detail}")
+
+
+# ==========================================
+# VIEW 6: AI ADVISORY PANEL & REPORT
 # ==========================================
 elif menu == "AI Advisory Panel":
     st.markdown("<h1>🤖 AI Personal Financial Advisor</h1>", unsafe_allow_html=True)
@@ -865,7 +963,7 @@ elif menu == "AI Advisory Panel":
     df_recent = df_tx.sort_values(by="Date", ascending=False).head(10)
     tx_string_list = []
     for _, r in df_recent.iterrows():
-        tx_string_list.append(f"{r['Date'].strftime('%Y-%m-%d')} | {r['Type']} | {r['Category']} | ${r['Amount']:.2f} | {r['Description']}")
+        tx_string_list.append(f"{r['Date'].strftime('%Y-%m-%d')} | {r['Type']} | {r['Category']} | ₹{r['Amount']:.2f} | {r['Description']}")
     transactions_str = "\n".join(tx_string_list)
     
     # AI Query processing function
@@ -876,17 +974,17 @@ elif menu == "AI Advisory Panel":
                 system_instruction = (
                     "You are a Senior Fintech Advisory Specialist. Generate personalized, highly professional, "
                     "and actionable wealth advice based on the user's provided ledger details and preferences. "
-                    "Always present formatted structure and bullet points."
+                    "State cash values in Indian Rupees (Rs.). Always present formatted structure and bullet points."
                 )
                 
                 context_prompt = f"""
                 Financial Health Score: {metrics_summary['health_score']}/100
-                Total Income: ${metrics_summary['total_income']:.2f}
-                Total Expenses: ${metrics_summary['total_expense']:.2f}
+                Total Income: Rs. {metrics_summary['total_income']:.2f}
+                Total Expenses: Rs. {metrics_summary['total_expense']:.2f}
                 Savings Rate: {metrics_summary['savings_rate']:.1f}%
                 Months of Emergency Fund Saved: {metrics_summary['emergency_months']:.1f}
-                Current Month Budget Utilized: {metrics_summary['budget_utilization']:.1f}% (Actual: ${metrics_summary['current_month_expenses']:.2f} / Budget Cap: ${metrics_summary['monthly_budget']:.2f})
-                Savings Goal: {metrics_summary['goal_name']} Target of ${metrics_summary['goal_amount']:.2f} (Est Timeline: {metrics_summary['goal_timeline']})
+                Current Month Budget Utilized: {metrics_summary['budget_utilization']:.1f}% (Actual: Rs. {metrics_summary['current_month_expenses']:.2f} / Budget Cap: Rs. {metrics_summary['monthly_budget']:.2f})
+                Savings Goal: {metrics_summary['goal_name']} Target of Rs. {metrics_summary['goal_amount']:.2f} (Est Timeline: {metrics_summary['goal_timeline']})
                 
                 Investment Preferences:
                 Age: {user_age}
@@ -930,7 +1028,7 @@ elif menu == "AI Advisory Panel":
                 f"Your current **Savings Rate** is **{sav_rate:.1f}%**.\n\n"
                 f"**Strategic Breakdown:**\n"
                 f"1. **Analyze Highest Expenditure:** Your top spending category is **{max_cat_name}** with a cumulative "
-                f"outflow of **${max_cat_sum:,.2f}**. Cutting back here by 15% will significantly improve your baseline savings rate.\n"
+                f"outflow of **₹{max_cat_sum:,.2f}**. Cutting back here by 15% will significantly improve your baseline savings rate.\n"
                 f"2. **Implement Pay-Yourself-First Strategy:** Automate a fixed deposit of at least 15% of your income into a separate high-yield account immediately on payday.\n"
                 f"3. **Target Savings Cushion:** With an emergency buffer of **{emerg_m:.1f} months**, continue accumulating deposits "
                 f"until you comfortably cover at least 6 months of living expenses."
@@ -950,9 +1048,9 @@ elif menu == "AI Advisory Panel":
         elif "budget" in query_cleaned or "spend" in query_cleaned or "overspending" in query_cleaned:
             advice = (
                 f"### AI Spending & Budget Assessment\n"
-                f"Your monthly budget cap is set to **${metrics_summary['monthly_budget']:,.2f}**.\n\n"
+                f"Your monthly budget cap is set to **₹{metrics_summary['monthly_budget']:,.2f}**.\n\n"
                 f"**Status Analysis:**\n"
-                f"Your actual outflows for the current month stand at **${current_month_exp_sum:,.2f}** (utilization: **{metrics_summary['budget_utilization']:.1f}%**).\n\n"
+                f"Your actual outflows for the current month stand at **₹{current_month_exp_sum:,.2f}** (utilization: **{metrics_summary['budget_utilization']:.1f}%**).\n\n"
                 f"**Optimization Checklist:**\n"
                 f"- **Warning Indicators:** "
                 f"{'🔴 High Risk! You have exceeded your monthly budget ceiling. Pause all non-essential outflows.' if metrics_summary['budget_utilization'] > 100 else '🟢 Good Management. Your current month spending is currently within limits.'}\n"
@@ -973,11 +1071,11 @@ elif menu == "AI Advisory Panel":
         else:
             advice = (
                 f"### AI Advisory Overview\n"
-                f"Hello! I am your rule-based AI financial advisor. Ask me specific questions about your portfolio, "
-                f"savings strategies, or budgets. For full personalized advisories, input your Gemini API Key in the sidebar.\n\n"
+                f"Hello! I am your AI financial advisor. Ask me specific questions about your portfolio, "
+                f"savings strategies, or budgets. For personalized advisories, input your Gemini API Key in the sidebar.\n\n"
                 f"**Current Summary:**\n"
                 f"- **Financial Health score:** {h_score}/100\n"
-                f"- **Cash Savings:** ${tot_sav:,.2f}\n"
+                f"- **Cash Savings:** ₹{tot_sav:,.2f}\n"
                 f"- **Risk tolerance:** {user_risk}"
             )
         return advice
@@ -1016,7 +1114,7 @@ elif menu == "AI Advisory Panel":
             st.info("No query logs recorded. Enter your query on the left pane to begin.")
 
     # ==========================================
-    # PDF REPORT GENERATOR MODULE
+    # PDF REPORT GENERATOR MODULE (Safely outputs Rs. / INR)
     # ==========================================
     st.markdown("---")
     st.markdown("### 📄 Generate Comprehensive Financial Report")
@@ -1031,7 +1129,7 @@ elif menu == "AI Advisory Panel":
                     else get_rule_based_advisory_text("health")
                 )
                 # Clean markdown characters from advisor text for standard Helvetica font limits
-                clean_adv_text = base_advisory_text.replace("**", "").replace("###", "").replace("🔹", "-").replace("🚨", "!").replace("⚠️", "!").replace("✨", "*")
+                clean_adv_text = base_advisory_text.replace("**", "").replace("###", "").replace("🔹", "-").replace("🚨", "!").replace("⚠️", "!").replace("✨", "*").replace("₹", "Rs. ")
                 
                 # FPDF Generation
                 pdf = FPDF()
@@ -1069,8 +1167,8 @@ elif menu == "AI Advisory Panel":
                 
                 kpi_data = [
                     ("Financial Health Score:", f"{metrics_summary['health_score']}/100"),
-                    ("Total Cumulative Income:", f"${metrics_summary['total_income']:,.2f}"),
-                    ("Total Cumulative Expenses:", f"${metrics_summary['total_expense']:,.2f}"),
+                    ("Total Cumulative Income:", f"INR {metrics_summary['total_income']:,.2f}"),
+                    ("Total Cumulative Expenses:", f"INR {metrics_summary['total_expense']:,.2f}"),
                     ("Overall Savings Rate:", f"{metrics_summary['savings_rate']:.1f}%"),
                     ("Emergency Cushion Months:", f"{metrics_summary['emergency_months']:.1f} months of expenses")
                 ]
@@ -1089,11 +1187,11 @@ elif menu == "AI Advisory Panel":
                 pdf.ln(2)
                 
                 budget_data = [
-                    ("Monthly Spending Cap:", f"${metrics_summary['monthly_budget']:,.2f}"),
-                    ("Current Month Spending (June):", f"${metrics_summary['current_month_expenses']:,.2f}"),
+                    ("Monthly Spending Cap:", f"INR {metrics_summary['monthly_budget']:,.2f}"),
+                    ("Current Month Spending:", f"INR {metrics_summary['current_month_expenses']:,.2f}"),
                     ("Budget Utilization Percentage:", f"{metrics_summary['budget_utilization']:.1f}%"),
                     ("Designated Savings Goal Name:", f"{metrics_summary['goal_name']}"),
-                    ("Savings Target Value:", f"${metrics_summary['goal_amount']:,.2f}"),
+                    ("Savings Target Value:", f"INR {metrics_summary['goal_amount']:,.2f}"),
                     ("Est Target Completion Timeline:", f"{metrics_summary['goal_timeline']}")
                 ]
                 
